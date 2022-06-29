@@ -1,0 +1,12 @@
+/litterature
+
+# For build
+hardware/project/
+hardware/target/
+hardware/build
+hardware/generated
+hardware/.idea/
+hardware/.bsp/
+hardware/test_run_dir
+hardware/*.gtkw
+hardware/*.txt
