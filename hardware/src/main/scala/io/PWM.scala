@@ -1,6 +1,8 @@
+package io
+
 import chisel3._
-import utility.Constants._
 import chisel3.util._
+import utility.Constants._
 class PWM(channels: Int) extends Module{
   val io = IO(new Bundle{
     val ch = Vec(channels, new Bundle{
