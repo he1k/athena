@@ -13,7 +13,7 @@ object Constants {
   val QUART_PERIOD = HALF_PERIOD/2
 
   // UART
-  val BAUD = 115200
+  val BAUD = 1111115200//115200
   val CPB = (MAIN_FREQ/BAUD - 1) // The amount of counts / clock cycles one bit of data translates
 
   // PWM constants
