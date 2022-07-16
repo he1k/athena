@@ -10,3 +10,6 @@ hardware/.bsp/
 hardware/test_run_dir
 hardware/*.gtkw
 hardware/*.txt
+software/*.iml
+software/out/
+software/.idea/
