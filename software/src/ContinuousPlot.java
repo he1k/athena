@@ -1,6 +1,8 @@
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
@@ -21,19 +23,28 @@ public class ContinuousPlot extends ApplicationFrame {
     private ChartPanel panel;
     private XYLineAndShapeRenderer rend;
     private XYPlot plot;
+    private NumberAxis yAxis, xAxis;
 
-    public ContinuousPlot(String appTitle, String chartTitle, String xLabel, String yLabel){
+    public ContinuousPlot(String appTitle, String chartTitle, String xLabel, String yLabel, int width, int height){
         super(appTitle);
         chart = ChartFactory.createXYLineChart(chartTitle, xLabel, yLabel,
                                                                 createDataset(),
                                                                 PlotOrientation.VERTICAL,
                                                                 true , true , false);
+        chart.getPlot().setBackgroundPaint(Color.WHITE);
         panel = new ChartPanel(chart);
-        panel.setPreferredSize(new java.awt.Dimension( 560 , 367 ));
+        panel.setPreferredSize(new java.awt.Dimension(width , height));
+        BasicStroke gridline = new BasicStroke(0.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL, 20, new float[]{3f}, 30);
         plot = chart.getXYPlot();
+        xAxis = (NumberAxis) plot.getDomainAxis();
+        yAxis = (NumberAxis) plot.getRangeAxis();
+        plot.setDomainGridlinesVisible(true);
+        plot.setDomainGridlinePaint(Color.GRAY);
+        plot.setDomainGridlineStroke(gridline);
+        plot.setRangeGridlinesVisible(true);
+        plot.setRangeGridlinePaint(Color.GRAY);
+        plot.setRangeGridlineStroke(gridline);
         rend = new XYLineAndShapeRenderer();
-        rend.setSeriesPaint(0 , Color.RED);
-        rend.setSeriesStroke(0 , new BasicStroke( 42.0f ));
         plot.setRenderer(rend);
         setContentPane(panel);
     }
@@ -67,11 +78,16 @@ public class ContinuousPlot extends ApplicationFrame {
         rend.setSeriesStroke(i , new BasicStroke(width));
         plot.setRenderer(rend);
     }
-    public void dump2Text(){
-
+    public void setXAxis(float min, float max, float tick){
+        xAxis.setRange(min, max);
+        xAxis.setTickUnit(new NumberTickUnit(tick));
+    }
+    public void setYAxis(float min, float max, float tick){
+        yAxis.setRange(min, max);
+        yAxis.setTickUnit(new NumberTickUnit(tick));
     }
     public static void main(String[] args) throws InterruptedException {
-        ContinuousPlot plot = new ContinuousPlot("myApp", "myChart", "xLabel", "yLabel");
+        ContinuousPlot plot = new ContinuousPlot("myApp", "myChart", "xLabel", "yLabel", 1300, 700);
         plot.addSeries("sin");
         for(float i = 0.0f; i < (float) 2*Math.PI; i += 0.1) {
             plot.addData("sin", i, Math.sin(i));
@@ -82,8 +98,10 @@ public class ContinuousPlot extends ApplicationFrame {
         plot.setVisible(true);
         plot.addSeries("cos");
         plot.setLine("cos", Color.GREEN, 4.0f);
+        plot.setXAxis(0.0f,(float) (2*Math.PI), 0.1f);
+        plot.setYAxis(-1.0f, 3.0f, 0.1f);
         for(int j = 0; j < 3; j++) {
-            for(float i = 0.0f; i < (float) 30*Math.PI; i += 0.1) {
+            for(float i = 0.0f; i < (float) 2*Math.PI; i += 0.1) {
                 plot.addData("cos", i, Math.cos(i));
                 Thread.sleep(30);
             }
